@@ -4,6 +4,9 @@
 #define TRIG_PIN_2 8
 #define ECHO_PIN_2 10
 
+#define NO_PIN_1   38
+
+
 #define LED_PIN 6
 
 // This delay represents the sampling of the distance
@@ -24,6 +27,10 @@ void setup() {
     digitalWrite(trigPins[i], LOW);
   }
 
+  // Closing sensor
+
+  pinMode(NO_PIN_1, INPUT_PULLUP);
+
   // LED setup
 
   pinMode(LED_PIN, OUTPUT);
@@ -37,7 +44,8 @@ void loop() {
   // Internal variables
 
   float detection_filtered[2];
-
+  char  lock_state = -1;
+  // -------------Ultrosonic part---------------- //
   // Reading sensors
 
   for (int i = 0; i < 2; i++) {
@@ -81,6 +89,15 @@ void loop() {
   }
 
   delay(DELAY);
+
+  //----------------Closing Part-------------------//
+  lock_state = digitalRead(NO_PIN_1);
+
+  if (lock_state == LOW)
+  {
+    Serial.println("Door closed");
+  }
+  else (Serial.println("Door open"));
 }
 
 float UltrasonicSensorReading(int trig_pin,
