@@ -6,8 +6,9 @@
 
 #define NO_PIN_1   38
 
+#define LED_PIN     6
 
-#define LED_PIN 6
+#define Solenoid_pin   11
 
 // This delay represents the sampling of the distance
 // change if you want sampling faster or slower
@@ -23,6 +24,7 @@ void setup() {
   for (int i = 0; i < 2; i++) {
     pinMode(trigPins[i], OUTPUT);
     pinMode(echoPins[i], INPUT);
+    pinMode(Solenoid_pin, OUTPUT);
 
     digitalWrite(trigPins[i], LOW);
   }
@@ -98,6 +100,13 @@ void loop() {
     Serial.println("Door closed");
   }
   else (Serial.println("Door open"));
+  // Locking Part
+  digitalWrite(Solenoid_pin, HIGH);
+
+  delay(1000);  
+  digitalWrite(Solenoid_pin, LOW);
+
+  delay(1000);
 }
 
 float UltrasonicSensorReading(int trig_pin,
