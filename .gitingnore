@@ -1,0 +1,42 @@
+# === Arduino ===
+*.ino.cpp
+*.ino.cpp.d
+*.elf
+*.hex
+.bin
+
+# Arduino build folders
+/build/
+/build-/
+/out/
+
+# Arduino IDE 2.x
+.arduino/
+.arduinoIDE/
+
+# Preferences & local config
+*.json
+
+# === ESP32 specific ===
+*.partitions.bin
+*.bootloader.bin
+
+# === OS files ===
+.DS_Store
+
+# === Logs ===
+*.log
+
+# === VS Code ===
+.vscode/
+
+# === PlatformIO ===
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# === Temporary files ===
+*.tmp
+*.swp
+*~
+node_modules/
