@@ -1,7 +1,54 @@
 body{
+    margin:0;
+    height:100vh;
 
-    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
-    background:#eeeeee;
+    background:#f4f4f4;
 
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.login-box{
+
+    width:320px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    box-shadow:0 0 15px rgba(0,0,0,.2);
+
+    text-align:center;
+}
+
+input{
+
+    width:100%;
+
+    padding:12px;
+
+    margin-top:15px;
+
+    box-sizing:border-box;
+}
+
+button{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:12px;
+
+    cursor:pointer;
+}
+
+#message{
+
+    margin-top:20px;
 }
