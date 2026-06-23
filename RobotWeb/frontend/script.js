@@ -10,29 +10,36 @@ function sendDestination() {
     console.log("Destination envoyée :", destination);
 }
 
-function login(){
+async function login() {
+    console.log("Login button clicked");
 
-    const username =
-        document.getElementById("username").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-    const password =
-        document.getElementById("password").value;
+    try {
+        const response = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ username, password })
+        });
 
-    if(username==="admin" && password==="robot"){
+        console.log("HTTP status:", response.status);
 
-        window.location.href = "index.html";
-        document.getElementById("message").innerHTML =
-            "Connexion réussie";
+        const data = await response.json();
+        console.log("Server response:", data);
 
+        if (data.success) {
+            console.log("Redirecting...");
+            window.location.href = "index.html";
+        } else {
+            document.getElementById("message").textContent = data.message;
+        }
+
+    } catch (err) {
+        console.error("Fetch error:", err);
     }
-
-    else{
-
-        document.getElementById("message").innerHTML =
-            "Identifiants incorrects";
-
-    }
-
 }
 
 const socket = new WebSocket("ws://localhost:8080");

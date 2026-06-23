@@ -3,8 +3,7 @@
 *.ino.cpp.d
 *.elf
 *.hex
-.bin
-
+*.bin
 # Arduino build folders
 /build/
 /build-/
@@ -39,3 +38,4 @@
 *.tmp
 *.swp
 *~
+node_modules/

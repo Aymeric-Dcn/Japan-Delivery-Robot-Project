@@ -1,3 +1,4 @@
+//-----------------PLEASE PAY ATTENTION TO THE LAYOUT OF THE PCB!!!!---------------------------//
 #define TRIG_PIN_1 39
 #define ECHO_PIN_1 40
 
@@ -8,7 +9,8 @@
 
 #define LED_PIN     6
 
-#define Solenoid_pin   11
+#define Solenoid_pin   15 
+
 
 // This delay represents the sampling of the distance
 // change if you want sampling faster or slower
