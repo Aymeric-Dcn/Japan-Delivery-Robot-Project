@@ -6,17 +6,12 @@ function sendDestination() {
 
     const destination = document.getElementById("destination").value;
 
-    if (!socket || socket.readyState !== 1) {
-        console.log("WebSocket not ready");
-        return;
-    }
-
-    socket.send(destination);
+    socket.send(JSON.stringify({
+        type: "mission",
+        arucoId: Number(destination)
+    }));
 
     console.log("Mission sent:", destination);
-
-    document.getElementById("status").innerText =
-        "Mission sent: " + destination;
 }
 
 async function login() {
@@ -52,17 +47,11 @@ async function login() {
 
 function unlockRobot() {
 
-    if (!socket || socket.readyState !== 1) {
-        console.log("WebSocket not ready");
-        return;
-    }
-
-    socket.send("UNLOCK");
+    socket.send(JSON.stringify({
+        type: "unlock"
+    }));
 
     console.log("Unlock sent");
-
-    document.getElementById("status").innerText =
-        "Unlock command sent";
 }
 
 const socket = new WebSocket("ws://localhost:8080");
@@ -72,7 +61,11 @@ socket.onopen = () => {
 };
 
 socket.onmessage = (event) => {
-    document.getElementById("message").textContent = event.data;
+
+    const data = JSON.parse(event.data);
+
+    console.log("Type:", data.type);
+    console.log("Message:", data.message);
 };
 
 socket.onclose = () => {

@@ -8,19 +8,27 @@
 
 <body>
 
+<div class="container">
+
     <h1>Sender</h1>
 
     <p>Send a mission to the robot</p>
 
-    <input id="destination" placeholder="Enter ArUco ID or destination">
+    <div class="card">
 
-    <button onclick="sendDestination()">
-        Send mission
-    </button>
+        <input id="destination" placeholder="Enter ArUco ID">
 
-    <p id="status"></p>
+        <button onclick="sendDestination()">
+            Send mission
+        </button>
 
-    <script src="script.js"></script>
+        <p id="status"></p>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>

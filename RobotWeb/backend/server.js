@@ -70,28 +70,95 @@ wss.on("connection", (ws) => {
 
     console.log("Interface connected");
 
-    ws.send("Robot connected");
+    ws.send(JSON.stringify({
+        type: "status",
+        message: "Robot connected"
+    }));
 
     ws.on("message", (message) => {
 
-        const destination = message.toString();
+        let data;
 
-        console.log("Destination:", destination);
+        // =========================
+        // PARSE JSON
+        // =========================
+        try {
+            data = JSON.parse(message);
+        } catch (e) {
+            console.log("Invalid message (not JSON):", message.toString());
 
-        ws.send("Mission received");
+            ws.send(JSON.stringify({
+                type: "error",
+                message: "Invalid format, expected JSON"
+            }));
 
-        setTimeout(() => {
-            ws.send("Robot started");
-        }, 1000);
+            return;
+        }
 
-        setTimeout(() => {
-            ws.send("Robot moving");
-        }, 3000);
+        console.log("Received:", data);
 
-        setTimeout(() => {
-            ws.send("Robot arrived");
-        }, 6000);
+        // =========================
+        // MISSION (ARUCO ID)
+        // =========================
+        if (data.type === "mission") {
 
+            console.log("Mission received, ArUco ID:", data.arucoId);
+
+            ws.send(JSON.stringify({
+                type: "status",
+                message: "Mission received"
+            }));
+
+            setTimeout(() => {
+                ws.send(JSON.stringify({
+                    type: "status",
+                    message: "Robot started"
+                }));
+            }, 1000);
+
+            setTimeout(() => {
+                ws.send(JSON.stringify({
+                    type: "status",
+                    message: "Robot moving"
+                }));
+            }, 3000);
+
+            setTimeout(() => {
+                ws.send(JSON.stringify({
+                    type: "status",
+                    message: "Robot arrived"
+                }));
+            }, 6000);
+        }
+
+        // =========================
+        // UNLOCK COMMAND
+        // =========================
+        else if (data.type === "unlock") {
+
+            console.log("Unlock command received");
+
+            ws.send(JSON.stringify({
+                type: "status",
+                message: "Unlock received"
+            }));
+
+            // ici plus tard:
+            // → trigger ROS / ESP / relay
+        }
+
+        // =========================
+        // UNKNOWN COMMAND
+        // =========================
+        else {
+
+            console.log("Unknown command:", data);
+
+            ws.send(JSON.stringify({
+                type: "error",
+                message: "Unknown command type"
+            }));
+        }
     });
 
     ws.on("close", () => {
@@ -99,7 +166,6 @@ wss.on("connection", (ws) => {
     });
 
     ws.on("error", (err) => {
-        console.error(err);
+        console.error("WebSocket error:", err);
     });
-
 });

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="script.js"></script>
     <meta charset="UTF-8">
     <title>Receiver - Robot</title>
     <link rel="stylesheet" href="style.css">
@@ -8,17 +9,25 @@
 
 <body>
 
-    <h1>Receiver</h1>
+<div class="container">
 
-    <p>Robot status + unlock control</p>
+    <h1>Delivery</h1>
 
-    <button onclick="unlockRobot()">
-        Unlock robot
-    </button>
+    <p>Click below to unlock the robot</p>
 
-    <p id="status"></p>
+    <div class="card">
 
-    <script src="script.js"></script>
+        <button onclick="unlockRobot()">
+            Unlock
+        </button>
+
+        <p id="status"></p>
+
+    </div>
+
+</div>
+
+
 
 </body>
 </html>

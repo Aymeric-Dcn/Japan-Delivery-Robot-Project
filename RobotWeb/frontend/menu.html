@@ -2,14 +2,27 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Menu</title>
+    <title>Robot Menu</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>Robot Menu</h1>
+<div class="container">
 
-<button onclick="goSender()">Send delivery</button>
-<button onclick="goReceiver()">Receive delivery</button>
+    <h1>Robot Menu</h1>
+
+    <p>Select an action</p>
+
+    <button onclick="goSender()">
+        Send delivery
+    </button>
+
+    <button onclick="goReceiver()">
+        Receive delivery
+    </button>
+
+</div>
 
 <script>
 function goSender() {
