@@ -3,43 +3,66 @@ function hello() {
 }
 
 function sendDestination() {
+
     const destination = document.getElementById("destination").value;
+
+    if (!socket || socket.readyState !== 1) {
+        console.log("WebSocket not ready");
+        return;
+    }
 
     socket.send(destination);
 
-    console.log("Destination envoyée :", destination);
+    console.log("Mission sent:", destination);
+
+    document.getElementById("status").innerText =
+        "Mission sent: " + destination;
 }
 
 async function login() {
-    console.log("Login button clicked");
+
+    console.log("Login clicked");
 
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    try {
-        const response = await fetch("http://localhost:8080/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ username, password })
-        });
+    const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, password })
+    });
 
-        console.log("HTTP status:", response.status);
+    console.log("Status:", response.status);
 
-        const data = await response.json();
-        console.log("Server response:", data);
+    const text = await response.text();
+    console.log("Raw response:", text);
 
-        if (data.success) {
-            console.log("Redirecting...");
-            window.location.href = "index.html";
-        } else {
-            document.getElementById("message").textContent = data.message;
-        }
+    const data = JSON.parse(text);
 
-    } catch (err) {
-        console.error("Fetch error:", err);
+    console.log("Parsed:", data);
+
+    if (data.success) {
+        window.location.href = "menu.html";
+    } else {
+        document.getElementById("message").textContent = data.message;
     }
+}
+
+function unlockRobot() {
+
+    if (!socket || socket.readyState !== 1) {
+        console.log("WebSocket not ready");
+        return;
+    }
+
+    socket.send("UNLOCK");
+
+    console.log("Unlock sent");
+
+    document.getElementById("status").innerText =
+        "Unlock command sent";
 }
 
 const socket = new WebSocket("ws://localhost:8080");

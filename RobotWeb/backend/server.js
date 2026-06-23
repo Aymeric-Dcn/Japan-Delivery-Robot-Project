@@ -1,4 +1,5 @@
 const cors = require("cors");
+const sessions = {};
 const express = require("express");
 const http = require("http");
 const WebSocket = require("./node_modules/ws");
@@ -35,39 +36,29 @@ app.post("/login", (req, res) => {
         (err, user) => {
 
             if (err) {
-                console.error(err);
-                return res.status(500).json({
+                return res.status(500).json({ success: false });
+            }
+
+            if (!user || user.password !== password) {
+                return res.status(401).json({
                     success: false,
-                    message: "Erreur serveur"
+                    message: "Invalid credentials"
                 });
             }
 
-            if (!user) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Utilisateur inconnu"
-                });
-            }
+            // create session token
+            const token = Date.now().toString() + Math.random();
 
-            if (user.password !== password) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Mot de passe incorrect"
-                });
-            }
+            sessions[token] = {
+                username: user.username
+            };
 
             res.json({
                 success: true,
-                message: "Connexion réussie",
-                user: {
-                    id: user.id,
-                    username: user.username
-                }
+                token
             });
-
         }
     );
-
 });
 
 
