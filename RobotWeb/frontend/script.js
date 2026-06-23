@@ -3,9 +3,11 @@ function hello() {
 }
 
 function sendDestination() {
-    let destination = document.getElementById("destination").value;
+    const destination = document.getElementById("destination").value;
 
-    alert("Destination: " + destination);
+    socket.send(destination);
+
+    console.log("Destination envoyée :", destination);
 }
 
 function login(){
@@ -40,7 +42,7 @@ socket.onopen = () => {
 };
 
 socket.onmessage = (event) => {
-    console.log("Robot :", event.data);
+    document.getElementById("message").textContent = event.data;
 };
 
 socket.onclose = () => {
