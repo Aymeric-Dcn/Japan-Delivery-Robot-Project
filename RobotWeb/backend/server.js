@@ -2,9 +2,10 @@ const cors = require("cors");
 const sessions = {};
 const express = require("express");
 const http = require("http");
-const WebSocket = require("./node_modules/ws");
+const WebSocket = require("ws");
 
 const db = require("./database"); // ton fichier SQLite
+const ros = require("./ros");
 
 const app = express();
 app.use(cors({
@@ -15,6 +16,30 @@ app.use(express.static("public"));
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
+
+// ===========================
+// ROS INITIALIZATION
+// ===========================
+
+ros.initROS((status) => {
+
+    console.log("[ROS -> WEB]", status);
+
+    // Broadcast the status to every connected client
+    wss.clients.forEach(client => {
+
+        if (client.readyState === WebSocket.OPEN) {
+
+            client.send(JSON.stringify({
+                type: "status",
+                message: status
+            }));
+
+        }
+
+    });
+
+});
 
 server.listen(8080, () => {
     console.log("Server running on http://localhost:8080");
@@ -104,31 +129,10 @@ wss.on("connection", (ws) => {
 
             console.log("Mission received, ArUco ID:", data.arucoId);
 
-            ws.send(JSON.stringify({
-                type: "status",
-                message: "Mission received"
-            }));
+            console.log("Mission received, ArUco ID:", data.arucoId);
 
-            setTimeout(() => {
-                ws.send(JSON.stringify({
-                    type: "status",
-                    message: "Robot started"
-                }));
-            }, 1000);
-
-            setTimeout(() => {
-                ws.send(JSON.stringify({
-                    type: "status",
-                    message: "Robot moving"
-                }));
-            }, 3000);
-
-            setTimeout(() => {
-                ws.send(JSON.stringify({
-                    type: "status",
-                    message: "Robot arrived"
-                }));
-            }, 6000);
+            // Publish to ROS
+            ros.publishMission(String(data.arucoId));
         }
 
         // =========================
