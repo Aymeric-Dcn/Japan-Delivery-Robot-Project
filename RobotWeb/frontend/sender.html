@@ -8,25 +8,50 @@
 
 <body>
 
-<div class="container">
+<div class="login-box">
 
-    <h1>Sender</h1>
+    <h2>Send a delivery</h2>
 
-    <p>Send a mission to the robot</p>
+    <label>Pickup location</label>
 
-    <div class="card">
+    <select id="pickup">
 
-        <input id="destination" placeholder="Enter ArUco ID">
+        <option value="1">Entrance</option>
+        <option value="2">Office</option>
+        <option value="3">Lab</option>
 
-        <button onclick="sendDestination()">
-            Send mission
-        </button>
+    </select>
 
-        <p id="status"></p>
 
-    </div>
+    <label>Destination</label>
+
+    <select id="destination">
+
+        <option value="1">Entrance</option>
+        <option value="2">Office</option>
+        <option value="3">Lab</option>
+
+    </select>
+
+
+    <label>Receiver</label>
+
+    <select id="receiver">
+
+    </select>
+
+
+    <button onclick="sendDelivery()">
+
+        Send
+
+    </button>
+
+    <p id="status"></p>
 
 </div>
+
+<script src="script.js"></script>
 
 <script src="script.js"></script>
 

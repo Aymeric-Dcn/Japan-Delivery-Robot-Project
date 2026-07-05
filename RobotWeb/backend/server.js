@@ -5,7 +5,7 @@ const http = require("http");
 const WebSocket = require("ws");
 
 const db = require("./database"); // ton fichier SQLite
-const ros = require("./ros");
+//const ros = require("./ros");
 
 const app = express();
 app.use(cors({
@@ -21,25 +21,25 @@ const wss = new WebSocket.Server({ server });
 // ROS INITIALIZATION
 // ===========================
 
-ros.initROS((status) => {
+// ros.initROS((status) => {
 
-    console.log("[ROS -> WEB]", status);
+//     console.log("[ROS -> WEB]", status);
 
-    // Broadcast the status to every connected client
-    wss.clients.forEach(client => {
+//     // Broadcast the status to every connected client
+//     wss.clients.forEach(client => {
 
-        if (client.readyState === WebSocket.OPEN) {
+//         if (client.readyState === WebSocket.OPEN) {
 
-            client.send(JSON.stringify({
-                type: "status",
-                message: status
-            }));
+//             client.send(JSON.stringify({
+//                 type: "status",
+//                 message: status
+//             }));
 
-        }
+//         }
 
-    });
+//     });
 
-});
+// });
 
 server.listen(8080, () => {
     console.log("Server running on http://localhost:8080");

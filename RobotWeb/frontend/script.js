@@ -72,4 +72,71 @@ socket.onclose = () => {
     console.log("Déconnecté");
 };
 
+window.onload = loadUsers;
+async function loadUsers(){
 
+    const res = await fetch("http://localhost:8080/users");
+
+    const users = await res.json();
+
+    const receiver = document.getElementById("receiver");
+
+    receiver.innerHTML = "";
+
+    users.forEach(user=>{
+
+        if(user.id===1) return;
+
+        receiver.innerHTML += `
+
+            <option value="${user.id}">
+
+                ${user.fullname}
+
+            </option>
+
+        `;
+
+    });
+
+}
+
+async function sendDelivery(){
+
+    const pickup = Number(document.getElementById("pickup").value);
+
+    const destination = Number(document.getElementById("destination").value);
+
+    const receiverId = Number(document.getElementById("receiver").value);
+
+    const senderId = 1;
+
+    const res = await fetch("http://localhost:8080/delivery",{
+
+        method:"POST",
+
+        headers:{
+
+            "Content-Type":"application/json"
+
+        },
+
+        body:JSON.stringify({
+
+            senderId,
+
+            receiverId,
+
+            pickup,
+
+            destination
+
+        })
+
+    });
+
+    const result = await res.json();
+
+    console.log(result);
+
+}
