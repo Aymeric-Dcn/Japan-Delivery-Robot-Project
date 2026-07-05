@@ -86,6 +86,98 @@ app.post("/login", (req, res) => {
     );
 });
 
+// ===========================
+// CREATE DELIVERY
+// ===========================
+
+app.post("/delivery", (req, res) => {
+
+    const { senderId, receiverId, pickup, destination } = req.body;
+
+    const createdAt = new Date().toISOString();
+
+    db.run(
+        `INSERT INTO deliveries
+        (sender_id, receiver_id, pickup, destination, status, created_at)
+
+        VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+            senderId,
+            receiverId,
+            pickup,
+            destination,
+            "CREATED",
+            createdAt
+        ],
+
+        function(err){
+
+            if(err){
+
+                console.error(err);
+
+                return res.status(500).json({
+                    success:false
+                });
+
+            }
+
+            res.json({
+
+                success:true,
+
+                deliveryId:this.lastID
+
+            });
+
+        }
+
+    );
+
+});
+
+// ===========================
+// USERS
+// ===========================
+
+app.get("/users", (req, res) => {
+
+    db.all(
+        "SELECT id, fullname FROM users",
+        [],
+        (err, rows) => {
+
+            if (err) {
+                return res.status(500).json([]);
+            }
+
+            res.json(rows);
+        }
+    );
+
+});
+
+
+// ===========================
+// DELIVERIES
+// ===========================
+
+app.get("/deliveries", (req, res) => {
+
+    db.all(
+        "SELECT * FROM deliveries",
+        [],
+        (err, rows) => {
+
+            if (err) {
+                return res.status(500).json([]);
+            }
+
+            res.json(rows);
+        }
+    );
+
+});
 
 // ===========================
 // WEBSOCKET ROBOT
@@ -132,7 +224,7 @@ wss.on("connection", (ws) => {
             console.log("Mission received, ArUco ID:", data.arucoId);
 
             // Publish to ROS
-            ros.publishMission(String(data.arucoId));
+            //ros.publishMission(String(data.arucoId));
         }
 
         // =========================
