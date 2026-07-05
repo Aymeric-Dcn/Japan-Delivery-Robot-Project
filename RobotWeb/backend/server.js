@@ -5,7 +5,7 @@ const http = require("http");
 const WebSocket = require("ws");
 
 const db = require("./database"); // ton fichier SQLite
-//const ros = require("./ros");
+const ros = require("./ros");
 
 const app = express();
 app.use(cors({
