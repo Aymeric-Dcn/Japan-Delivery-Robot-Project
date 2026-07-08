@@ -21,7 +21,7 @@ async function login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    const response = await fetch("http://localhost:8080/login", {
+    const response = await fetch("http://192.168.11.23:8080/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -54,7 +54,7 @@ function unlockRobot() {
     console.log("Unlock sent");
 }
 
-const socket = new WebSocket("ws://localhost:8080");
+const socket = new WebSocket("ws://192.168.11.23:8080");
 
 socket.onopen = () => {
     console.log("Connecté");

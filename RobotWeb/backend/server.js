@@ -1,4 +1,5 @@
 const cors = require("cors");
+const path = require("path");
 const sessions = {};
 const express = require("express");
 const http = require("http");
@@ -9,10 +10,24 @@ const ros = require("./ros");
 
 const app = express();
 app.use(cors({
-    origin: "http://127.0.0.1:5500"
+    origin: "*" // Allows any device on your Wi-Fi to send requests
 }));
 app.use(express.json());
-app.use(express.static("public"));
+
+// --- DEBUG BLOCK ---
+const frontendPath = path.join(__dirname, "../frontend");
+console.log("-------------------------------------------------");
+console.log("EXPRESS IS LOOKING FOR HTML FILES IN:");
+console.log(frontendPath);
+console.log("-------------------------------------------------");
+
+app.use(express.static(frontendPath));
+
+// A simple test page to prove the server is alive
+app.get("/test", (req, res) => {
+    res.send("Hello! The server is alive and the network works!");
+});
+// -------------------
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -41,8 +56,8 @@ ros.initROS((status) => {
 
 });
 
-server.listen(8080, () => {
-    console.log("Server running on http://localhost:8080");
+server.listen(8080, "0.0.0.0", () => {
+    console.log("Server listening on all network interfaces (0.0.0.0:8080)");
     console.log("Robot simulator started on ws://localhost:8080");
 });
 
