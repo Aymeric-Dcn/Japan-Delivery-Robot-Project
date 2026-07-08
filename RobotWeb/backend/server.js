@@ -4,15 +4,32 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 
-const db = require("./database"); // ton fichier SQLite
+const db = require("./database");
 const ros = require("./ros");
 
 const app = express();
-app.use(cors({
-    origin: "http://127.0.0.1:5500"
-}));
+
+const path = require("path");
+
+app.use(cors());
+
+app.use(cors());
+
 app.use(express.json());
-app.use(express.static("public"));
+
+// =====================================
+// Frontend
+// =====================================
+
+const FRONTEND_PATH = path.join(__dirname, "../frontend");
+
+console.log("==========================================");
+console.log(" Japan Delivery Robot - Backend");
+console.log("==========================================");
+console.log("Backend folder :", __dirname);
+console.log("Frontend folder:", FRONTEND_PATH);
+
+app.use(express.static(FRONTEND_PATH));
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -41,11 +58,9 @@ ros.initROS((status) => {
 
 });
 
-server.listen(8080, () => {
-    console.log("Server running on http://localhost:8080");
-    console.log("Robot simulator started on ws://localhost:8080");
+server.listen(8080, "0.0.0.0", () => {
+    console.log("Server running on port 8080");
 });
-
 
 // ===========================
 // LOGIN

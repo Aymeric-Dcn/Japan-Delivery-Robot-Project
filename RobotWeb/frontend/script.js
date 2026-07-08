@@ -21,7 +21,7 @@ async function login() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    const response = await fetch("http://localhost:8080/login", {
+    const response = await fetch("/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -54,7 +54,7 @@ function unlockRobot() {
     console.log("Unlock sent");
 }
 
-const socket = new WebSocket("ws://localhost:8080");
+const socket = new WebSocket(`ws://${window.location.host}`);
 
 socket.onopen = () => {
     console.log("Connecté");
@@ -72,10 +72,16 @@ socket.onclose = () => {
     console.log("Déconnecté");
 };
 
-window.onload = loadUsers;
+window.onload = () => {
+    const receiver = document.getElementById("receiver");
+
+    if (receiver) {
+        loadUsers();
+    }
+};
 async function loadUsers(){
 
-    const res = await fetch("http://localhost:8080/users");
+    const res = await fetch("/users");
 
     const users = await res.json();
 
@@ -111,7 +117,7 @@ async function sendDelivery(){
 
     const senderId = 1;
 
-    const res = await fetch("http://localhost:8080/delivery",{
+    const res = await fetch("/delivery", {
 
         method:"POST",
 
