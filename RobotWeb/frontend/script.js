@@ -1,3 +1,21 @@
+// ======================================
+// Authentication check
+// ======================================
+
+const currentPage = window.location.pathname.split("/").pop();
+
+if (currentPage !== "login.html") {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+
+        window.location.href = "login.html";
+
+    }
+
+}
+
 function hello() {
     alert("Hello!");
 }
@@ -166,8 +184,39 @@ async function loadDeliveries() {
     console.log("HTTP status:", res.status);
     const deliveries = await res.json();
 
-    console.log(deliveries);
+    const container = document.getElementById("deliveries");
 
+    container.innerHTML = "";
+
+    deliveries.forEach(delivery => {
+
+    const unlockEnabled = canUnlock(delivery);
+
+    container.innerHTML += `
+
+        <div class="card">
+
+            <h3>Delivery #${delivery.id}</h3>
+
+            <p><b>From:</b> ${delivery.sender_name}</p>
+
+            <p><b>Pickup:</b> ${delivery.pickup}</p>
+
+            <p><b>Destination:</b> ${delivery.destination}</p>
+
+            <p><b>Status:</b> ${delivery.status}</p>
+
+            <button
+                onclick="unlockDelivery(${delivery.id})"
+                ${unlockEnabled ? "" : "disabled"}>
+                Unlock
+            </button>
+
+        </div>
+
+    `;
+
+    });
     console.log("script.js loaded");
 
 }
@@ -175,5 +224,25 @@ async function loadDeliveries() {
 if (document.getElementById("deliveries")) {
 
     loadDeliveries();
+
+}
+
+function unlockDelivery(deliveryId) {
+
+    socket.send(JSON.stringify({
+
+        type: "unlock",
+        deliveryId
+
+    }));
+
+    console.log("Unlock requested:", deliveryId);
+
+}
+
+function canUnlock(delivery) {
+
+    //return delivery.status === "WAITING_RECEIVER_UNLOCK";
+    return false;
 
 }
