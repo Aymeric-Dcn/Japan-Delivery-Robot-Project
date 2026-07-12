@@ -95,8 +95,13 @@ app.post("/login", (req, res) => {
 
             res.json({
                 success: true,
-                token
-            });
+                token,
+                user: {
+                        id: user.id,
+                        username: user.username,
+                        fullname: user.fullname
+                    }
+                });
         }
     );
 });
@@ -185,23 +190,44 @@ app.get("/users", (req, res) => {
 // DELIVERIES
 // ===========================
 
-app.get("/deliveries", (req, res) => {
+app.get("/my-deliveries", (req, res) => {
+
+    const receiverId = Number(req.query.receiverId);
 
     db.all(
-        "SELECT * FROM deliveries",
-        [],
+
+        `SELECT
+            deliveries.*,
+            users.fullname AS sender_name
+
+         FROM deliveries
+
+         JOIN users
+         ON deliveries.sender_id = users.id
+
+         WHERE receiver_id = ?
+
+         ORDER BY id DESC`,
+
+        [receiverId],
+
         (err, rows) => {
 
             if (err) {
+
+                console.error(err);
+
                 return res.status(500).json([]);
+
             }
 
             res.json(rows);
+
         }
+
     );
 
 });
-
 // ===========================
 // WEBSOCKET ROBOT
 // ===========================

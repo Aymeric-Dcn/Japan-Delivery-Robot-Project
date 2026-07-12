@@ -39,6 +39,10 @@ async function login() {
     console.log("Parsed:", data);
 
     if (data.success) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.user.id);
+        localStorage.setItem("username", data.user.username);
+        localStorage.setItem("fullname", data.user.fullname);
         window.location.href = "menu.html";
     } else {
         document.getElementById("message").textContent = data.message;
@@ -144,5 +148,27 @@ async function sendDelivery(){
     const result = await res.json();
 
     console.log(result);
+
+}
+
+async function loadDeliveries() {
+
+    const receiverId = localStorage.getItem("userId");
+
+    const res = await fetch(
+
+        `/my-deliveries?receiverId=${receiverId}`
+
+    );
+
+    const deliveries = await res.json();
+
+    console.log(deliveries);
+
+}
+
+if (document.getElementById("deliveries")) {
+
+    loadDeliveries();
 
 }
