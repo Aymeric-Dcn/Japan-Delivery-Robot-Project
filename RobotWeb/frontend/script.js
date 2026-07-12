@@ -119,7 +119,7 @@ async function sendDelivery(){
 
     const receiverId = Number(document.getElementById("receiver").value);
 
-    const senderId = 1;
+    const senderId = Number(localStorage.getItem("userId"));
 
     const res = await fetch("/delivery", {
 
@@ -153,6 +153,8 @@ async function sendDelivery(){
 
 async function loadDeliveries() {
 
+    console.log("loadDeliveries called");
+
     const receiverId = localStorage.getItem("userId");
 
     const res = await fetch(
@@ -161,9 +163,12 @@ async function loadDeliveries() {
 
     );
 
+    console.log("HTTP status:", res.status);
     const deliveries = await res.json();
 
     console.log(deliveries);
+
+    console.log("script.js loaded");
 
 }
 
