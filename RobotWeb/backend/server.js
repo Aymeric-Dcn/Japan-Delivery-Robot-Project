@@ -263,34 +263,24 @@ wss.on("connection", (ws) => {
 
         console.log("Received:", data);
 
-        // =========================
-        // MISSION (ARUCO ID)
-        // =========================
-        if (data.type === "mission") {
 
-            console.log("Mission received, ArUco ID:", data.arucoId);
-
-            console.log("Mission received, ArUco ID:", data.arucoId);
-
-            // Publish to ROS
-            //ros.publishMission(String(data.arucoId));
-        }
 
         // =========================
         // UNLOCK COMMAND
         // =========================
-        else if (data.type === "unlock") {
+        if (data.type === "unlock") {
 
             console.log("Unlock command received");
+
+            ros.publishUnlock();
 
             ws.send(JSON.stringify({
                 type: "status",
                 message: "Unlock received"
             }));
 
-            // ici plus tard:
-            // → trigger ROS / ESP / relay
         }
+
 
         // =========================
         // UNKNOWN COMMAND

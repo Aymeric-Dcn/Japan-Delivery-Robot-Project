@@ -19,8 +19,8 @@ async function initROS(onStatusReceived) {
     );
 
     unlockPublisher = node.createPublisher(
-        "std_msgs/msg/Bool",
-        "/unlock"
+    "std_msgs/msg/String",
+    "/unlock"
     );
 
     // ==========================
@@ -77,22 +77,23 @@ function publishMission(mission) {
 // Publish Unlock
 // ==========================
 
-function publishUnlock(unlock = true) {
+function publishUnlock() {
 
     if (!unlockPublisher) {
 
         console.log("ROS unlock publisher not initialized");
-
+        
         return;
+
     }
 
     unlockPublisher.publish({
 
-        data: unlock
+        data: "UNLOCK"
 
     });
 
-    console.log("[ROS] Unlock published:", unlock);
+    console.log("[ROS] Unlock published");
 
 }
 

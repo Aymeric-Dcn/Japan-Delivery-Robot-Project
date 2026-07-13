@@ -238,11 +238,13 @@ function unlockDelivery(deliveryId) {
 
     console.log("Unlock requested:", deliveryId);
 
+
 }
+
 
 function canUnlock(delivery) {
 
-    //return delivery.status === "WAITING_RECEIVER_UNLOCK";
-    return false;
+    return true;
+    
 
 }
