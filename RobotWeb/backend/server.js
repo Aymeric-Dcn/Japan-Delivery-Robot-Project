@@ -17,6 +17,9 @@ app.use(cors());
 
 app.use(express.json());
 
+let robotState = "PARK";
+let currentDeliveryId = null;
+
 // =====================================
 // Frontend
 // =====================================
@@ -40,7 +43,39 @@ const wss = new WebSocket.Server({ server });
 
 ros.initROS((status) => {
 
+    console.log("ROS status:", status);
+    console.log("Current delivery:", currentDeliveryId);
+    robotState = status;
+
     console.log("[ROS -> WEB]", status);
+
+    if (currentDeliveryId !== null) {
+
+        db.run(
+
+            "UPDATE deliveries SET status = ? WHERE id = ?",
+
+            [status, currentDeliveryId],
+
+            (err) => {
+
+                if (err) {
+
+                    console.error(err);
+
+                }
+
+            }
+
+        );
+
+    }
+
+    if (status === "PARK") {
+
+        currentDeliveryId = null;
+
+    }
 
     // Broadcast the status to every connected client
     wss.clients.forEach(client => {
@@ -48,8 +83,11 @@ ros.initROS((status) => {
         if (client.readyState === WebSocket.OPEN) {
 
             client.send(JSON.stringify({
+
                 type: "status",
+
                 message: status
+
             }));
 
         }
@@ -157,7 +195,8 @@ app.post("/delivery", (req, res) => {
                 deliveryId:this.lastID
 
             });
-
+            currentDeliveryId = this.lastID;
+            console.log("Current delivery =", currentDeliveryId);
         }
 
     );
