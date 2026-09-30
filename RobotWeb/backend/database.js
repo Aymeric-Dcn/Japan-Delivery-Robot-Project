@@ -1,6 +1,9 @@
 const sqlite3 = require("sqlite3").verbose();
 
-const db = new sqlite3.Database("./robot.db");
+const path = require("path");
+
+// Always use backend/robot.db, whatever folder the server is started from
+const db = new sqlite3.Database(path.join(__dirname, "robot.db"));
 
 db.serialize(() => {
 

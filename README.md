@@ -113,13 +113,12 @@ Console output captured on the robot during the tests (full robot stack, develop
 ## Project status
 
 **Done**
-- Web interface: authentication, delivery creation and receiver view
+- Web interface: authentication, delivery creation and receiver view (the *Unlock* button is only enabled when the robot is waiting at the destination)
 - SQLite database for users and deliveries
 - Web ↔ backend ↔ ROS 2 communication in both directions, with live status feedback
 - Locker firmware: package detection, door sensor, lock control
 
 **Next steps**
-- Delivery state machine on the receiver side (enable *Unlock* only once the robot has arrived)
 - Full integration of the locker with the `/unlock` topic
 - Replace the simulated statuses of the C++ bridge with the real navigation states
 - Password hashing (bcrypt) for the authentication system
@@ -135,7 +134,7 @@ npm install
 node backend/server.js      # server on http://localhost:8080
 ```
 
-> **Demo database:** `RobotWeb/robot.db` and `RobotWeb/backend/robot.db` are included on purpose so the platform can be tested right away. They only contain fictional test accounts (e.g. `alice` / `bob`) with dummy passwords and sample deliveries. Passwords are stored in plain text because this is a prototype; a production version would hash them (e.g. with bcrypt) and would not ship a database in the repository.
+> **Demo database:** `RobotWeb/backend/robot.db` is included on purpose so the platform can be tested right away. It only contains fictional test accounts (e.g. `alice` / `bob`) with dummy passwords and sample deliveries. Passwords are stored in plain text because this is a prototype; a production version would hash them (e.g. with bcrypt) and would not ship a database in the repository.
 
 Build the ROS 2 bridge:
 

@@ -40,7 +40,6 @@
 *~
 node_modules/
 RobotWeb/node_modules/
-RobotWeb/backend/robot.db
 .vscode/
 .DS_Store
 *.log

@@ -16,22 +16,6 @@ if (currentPage !== "login.html") {
 
 }
 
-function hello() {
-    alert("Hello!");
-}
-
-function sendDestination() {
-
-    const destination = document.getElementById("destination").value;
-
-    socket.send(JSON.stringify({
-        type: "mission",
-        arucoId: Number(destination)
-    }));
-
-    console.log("Mission sent:", destination);
-}
-
 async function login() {
 
     console.log("Login clicked");
@@ -65,15 +49,6 @@ async function login() {
     } else {
         document.getElementById("message").textContent = data.message;
     }
-}
-
-function unlockRobot() {
-
-    socket.send(JSON.stringify({
-        type: "unlock"
-    }));
-
-    console.log("Unlock sent");
 }
 
 const socket = new WebSocket(`ws://${window.location.host}`);
@@ -242,9 +217,11 @@ function unlockDelivery(deliveryId) {
 }
 
 
+// The locker can only be opened once the robot is waiting at the destination
+const UNLOCKABLE_STATUSES = ["WAIT", "Robot arrived"];
+
 function canUnlock(delivery) {
 
-    return true;
-    
+    return UNLOCKABLE_STATUSES.includes(delivery.status);
 
 }

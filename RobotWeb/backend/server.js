@@ -13,8 +13,6 @@ const path = require("path");
 
 app.use(cors());
 
-app.use(cors());
-
 app.use(express.json());
 
 let robotState = "PARK";
